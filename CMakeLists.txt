@@ -161,6 +161,23 @@ if(MSVC)
     endif()
 endif()
 
+# remove warning for objects with no symbols created when calling the Mac libtool and
+# the CUDA-specific build is not used
+if(APPLE)
+    if(NOT CMAKE_LIBTOOL)
+        find_program(CMAKE_LIBTOOL NAMES libtool)
+    endif()
+    if(CMAKE_LIBTOOL)
+        set(CMAKE_LIBTOOL ${CMAKE_LIBTOOL} CACHE PATH "libtool executable")
+        message(STATUS "Found libtool - ${CMAKE_LIBTOOL}")
+        get_property(languages GLOBAL PROPERTY ENABLED_LANGUAGES)
+        foreach(lang ${languages})
+        set(CMAKE_${lang}_CREATE_STATIC_LIBRARY
+            "${CMAKE_LIBTOOL} -static -o <TARGET> <LINK_FLAGS> <OBJECTS> ")
+        endforeach()
+        set_target_properties(n2d2_lib PROPERTIES STATIC_LIBRARY_FLAGS "-no_warning_for_no_symbols")
+    endif()
+endif()
 
 set_target_properties(n2d2_lib PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
 set_target_properties(n2d2_lib PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "${CMAKE_CURRENT_LIST_DIR}/include/Precompiled.hpp")
