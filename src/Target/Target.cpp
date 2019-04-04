@@ -24,6 +24,9 @@
 #include "Cell/Cell.hpp"
 #include "Cell/Cell_Frame_Top.hpp"
 #include "Cell/Cell_CSpike_Top.hpp"
+#if defined(__unix__) || defined(__APPLE__) && defined(__MACH__)
+    #include <unistd.h>
+#endif
 
 N2D2::Registrar<N2D2::Target> N2D2::Target::mRegistrar("Target",
                                                        N2D2::Target::create);

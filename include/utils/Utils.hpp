@@ -532,11 +532,10 @@ namespace Utils {
     // object in the second argument. This seems to be consistent with the
     // fact that it is not not required by the standard (see, for e.g.
     // https://en.cppreference.com/w/cpp/locale/locale/locale)
-    // Current workaround alternatives: (1) replace the const quantifier with
-    // a static one or (2) use a unique_ptr
+    // Current workaround: replace the const quantifier with a static one 
     // Warning: the static quantifier might still bring back the segfault
     // behavior decribed below !?
-    std::unique_ptr<commaNumpunct> commaNumpunctInst(new commaNumpunct);
+    static commaNumpunct commaNumpunctInst(1);
     // For an unknown reason, a segfault can occur after an exception is thrown.
     // Relevant stack trace:
     // #3  0x00007fffe131437a in malloc_printerr (ar_ptr=<optimized out>,
@@ -556,8 +555,7 @@ namespace Utils {
     // Pass the numpunct by reference, with refs = 1 so that delete is not
     // called by the implementation
     // See https://stackoverflow.com/questions/22647584/segfault-when-imbueing-stringstream-with-custom-locale
-    // const std::locale locale(std::locale(), &commaNumpunctInst);
-    const std::locale locale(std::locale(), commaNumpunctInst.get());
+    const std::locale locale(std::locale(), &commaNumpunctInst);
 
     // streamIgnoreBase is necessary to ensure that "rc" get initialized before
     // the call to get_table() in the derived class

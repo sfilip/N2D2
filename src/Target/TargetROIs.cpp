@@ -24,6 +24,9 @@
 #include "Cell/Cell.hpp"
 #include "ROI/RectangularROI.hpp"
 #include "Target/TargetROIs.hpp"
+#if defined(__unix__) || defined(__APPLE__) && defined(__MACH__)
+    #include <unistd.h>
+#endif
 
 N2D2::Registrar<N2D2::Target>
 N2D2::TargetROIs::mRegistrar("TargetROIs", N2D2::TargetROIs::create);
