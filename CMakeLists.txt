@@ -94,6 +94,9 @@ if(MSVC)
     # TODO clean-up warnings
     target_compile_options(n2d2_lib PUBLIC /W3 /wd4250 /wd4512 /wd4267 /wd4244 /wd4800 /wd4297)
     target_compile_definitions(n2d2_lib PUBLIC _CONSOLE _VISUALC_ NeedFunctionPrototypes _CRT_SECURE_NO_WARNINGS _VARIADIC_MAX=10)
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    # add Clang specific option to remove any warnings due to unused arguments
+    target_compile_options(n2d2_lib PUBLIC -std=c++0x -Wall -Wextra -pedantic -Wno-unknown-pragmas -Wno-unused-variable -fsigned-char -Qunused-arguments)
 else()
     target_compile_options(n2d2_lib PUBLIC -std=c++0x -Wall -Wextra -pedantic -Wno-unknown-pragmas -Wno-unused-variable -fsigned-char)
 endif()
