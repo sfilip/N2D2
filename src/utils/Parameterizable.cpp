@@ -161,7 +161,8 @@ N2D2::Parameterizable::setPrefixedParameters(std::map
                     throw;
                 }
 
-                if (!readOk || !value.eof()) {
+                //if (!readOk || !value.eof()) {
+                if(!value.eof()) {
                     std::stringstream msgStr;
                     msgStr << "Error reading value for parameter "
                            << (*it).first << ": \"" << (*it).second << "\"";
